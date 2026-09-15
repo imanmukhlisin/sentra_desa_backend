@@ -1,0 +1,71 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sentradesa-mysql
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: sentra_desa_db
+      MYSQL_USER: sentradesa
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - sentradesa-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ppassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sentradesa-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html
+    environment:
+      APP_NAME: SentraDesa
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: sentra_desa_db
+      DB_USERNAME: root
+      DB_PASSWORD: password
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - sentradesa-net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: sentradesa-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    depends_on:
+      - mysql
+    networks:
+      - sentradesa-net
+
+volumes:
+  mysql-data:
+    driver: local
+
+networks:
+  sentradesa-net:
+    driver: bridge

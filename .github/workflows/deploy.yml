@@ -1,0 +1,96 @@
+name: Deploy Backend to VPS Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production_backend_deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy Backend (Laravel) to VPS
+    runs-on: ubuntu-latest
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST || '45.80.181.191' }}
+      VPS_USER: ${{ secrets.VPS_USER || 'root' }}
+      TARGET_DIR: ${{ secrets.TARGET_DIR || '/var/www/sentradesa.id/sentra-desa-backend' }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Configure SSH Known Hosts & KeepAlive
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 -H ${{ env.VPS_HOST }} >> ~/.ssh/known_hosts
+          cat << 'EOF' >> ~/.ssh/config
+          Host *
+            ServerAliveInterval 30
+            ServerAliveCountMax 5
+            StrictHostKeyChecking accept-new
+          EOF
+          chmod 600 ~/.ssh/config
+
+      - name: Ensure Target Directory Exists
+        run: |
+          ssh ${{ env.VPS_USER }}@${{ env.VPS_HOST }} "mkdir -p ${{ env.TARGET_DIR }}"
+
+      - name: Deploy Backend via Rsync
+        run: |
+          rsync -avz --delete \
+            -e "ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=5" \
+            --filter='protect .env*' \
+            --filter='protect storage/' \
+            --filter='protect public/storage' \
+            --filter='protect vendor/' \
+            --exclude='.env*' \
+            --exclude='vendor/' \
+            --exclude='node_modules/' \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='storage/' \
+            --exclude='public/storage' \
+            --exclude='bootstrap/cache/*' \
+            --exclude='.phpunit.*' \
+            --exclude='tests/' \
+            ./ \
+            ${{ env.VPS_USER }}@${{ env.VPS_HOST }}:${{ env.TARGET_DIR }}/
+
+      - name: Post-Deployment Tasks & Reload Services
+        run: |
+          ssh ${{ env.VPS_USER }}@${{ env.VPS_HOST }} "
+            set -e
+            cd ${{ env.TARGET_DIR }}
+            
+            echo '==> 1. Menginstall Dependencies Composer...'
+            COMPOSER_ALLOW_SUPERUSER=1 composer install --optimize-autoloader --no-dev --ignore-platform-reqs
+            
+            echo '==> 2. Menjalankan Database Migration...'
+            php artisan migrate --force
+            
+            echo '==> 3. Membersihkan & Mengoptimalkan Cache Laravel...'
+            php artisan optimize:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan storage:link || true
+            
+            echo '==> 4. Mengatur Permission Storage & Cache...'
+            chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true
+            chmod -R 775 storage bootstrap/cache
+            
+            echo '==> 5. Reload Nginx & PHP-FPM...'
+            nginx -t && systemctl reload nginx
+            systemctl reload php*-fpm 2>/dev/null || true
+            
+            echo '==> DEPLOY BERHASIL!'
+          "

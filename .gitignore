@@ -1,57 +1,107 @@
 # ============================================
-# Laravel Backend .gitignore
+# Sentra Desa - Laravel Backend .gitignore
 # ============================================
 
-# Environment & Secrets
+# 1. Environment & Secrets
 .env
 .env.backup
 .env.production
+.env.local
+.env.staging
+.env.testing
+.env.*.local
 auth.json
 
-# Dependencies
+# SSH & SSL Keys (Never commit private keys or certificates)
+*.pem
+*.key
+*.crt
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+
+# Local Deployment & SSH Scripts
+deploy.ps1
+deploy.sh
+deploy-debug-logging.sh
+deploy*.sh
+deploy*.ps1
+sentradesa.id.conf
+
+# 2. Dependencies
 /vendor/
 /node_modules/
 /public/_laravel-brain/
 
-# Build outputs
+# 3. Build & Static Assets
 /public/hot
 /public/storage
 /public/build/
 
-# Storage (keep structure, ignore contents)
+# 4. Storage & Framework Cache (Keep directory structure via .gitkeep)
 /storage/*.key
+/storage/app/public/*
+!/storage/app/public/.gitkeep
 /storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitkeep
 /storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
 /storage/framework/testing/*
+!/storage/framework/testing/.gitkeep
 /storage/framework/views/*
+!/storage/framework/views/.gitkeep
 /storage/logs/*
+!/storage/logs/.gitkeep
 
-# Bootstrap cache
+# 5. Bootstrap Cache
 /bootstrap/cache/*
-!bootstrap/cache/.gitkeep
+!/bootstrap/cache/.gitkeep
 
-# Testing
+# 6. Temporary, Backup & Archive Files
+*.bak
+*.bak*
+*.tmp
+*.temp
+*~
+*.swp
+*.swo
+*.tar
+*.tar.gz
+*.zip
+*.rar
+sentra_*_deploy.tar.gz
+
+# 7. Testing & Quality Assurance
 .phpunit.result.cache
 .phpunit.cache/
 /coverage/
+.php-cs-fixer.cache
 
-# IDE
+# 8. IDE & Editor Artifacts
 /.idea/
 /.vscode/
 *.iml
 *.ipr
 *.iws
+*.sublime-project
+*.sublime-workspace
 
-# OS
+# 9. Operating System Files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Desktop.ini
 
-# Debug logs
-npm-debug.log
-yarn-error.log
-
-# Homestead / Sail
+# 10. Development & Sail Tools
 Homestead.json
 Homestead.yaml
 docker-compose.override.yml
 .sail/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

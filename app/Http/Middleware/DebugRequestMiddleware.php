@@ -21,7 +21,7 @@ class DebugRequestMiddleware
             'full_url' => $request->fullUrl(),
             'headers' => $request->headers->all(),
             'cookies' => $request->cookies->all(),
-            'session_id' => $request->session()->getId(),
+            'session_id' => $request->hasSession() ? $request->session()->getId() : null,
         ]);
 
         try {
