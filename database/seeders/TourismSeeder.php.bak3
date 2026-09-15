@@ -1,0 +1,198 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class TourismSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $tourisms = [
+            // Desa Malasari
+            [
+                'village_id' => 32010102,
+                'name' => 'Ekowisata Gunung Halimun',
+                'description' => 'Wisata alam dengan trekking menuju air terjun tersembunyi dan hutan pinus. Udara sejuk dan pemandangan yang menakjubkan. Termasuk paket camping dan bird watching. Cocok untuk keluarga dan pecinta alam.',
+                'category' => 'alam',
+                'address' => 'Kampung Malasari RT 03/02',
+                'contact' => '081234560001',
+                'opening_hours' => '07:00-17:00',
+                'ticket_price' => 25000,
+                'facilities' => 'Parkir, Toilet, Mushola, Warung, Spot Foto',
+                'image' => 'https://picsum.photos/seed/tourism1/1200/800',
+                'latitude' => -6.7321,
+                'longitude' => 106.5234,
+                'is_featured' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'village_id' => 32010102,
+                'name' => 'Air Terjun Cikuluwung',
+                'description' => 'Air terjun setinggi 30 meter dengan kolam alami yang jernih. Akses jalan setapak sekitar 1km dari parkiran. Suasana masih sangat alami dan sejuk.',
+                'category' => 'alam',
+                'address' => 'Kampung Cikuluwung',
+                'contact' => '081234560002',
+                'opening_hours' => '08:00-16:00',
+                'ticket_price' => 15000,
+                'facilities' => 'Parkir, Toilet, Warung',
+                'image' => 'https://picsum.photos/seed/tourism2/1200/800',
+                'latitude' => -6.7356,
+                'longitude' => 106.5198,
+                'is_featured' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Alamendah
+            [
+                'village_id' => 32040101,
+                'name' => 'Kawah Putih Ciwidey',
+                'description' => 'Danau kawah vulkanik dengan air berwarna putih kehijauan yang eksotis. Terletak di ketinggian 2.430 mdpl dengan suhu udara 8-22°C. Salah satu destinasi wisata alam paling terkenal di Jawa Barat.',
+                'category' => 'alam',
+                'address' => 'Jl. Raya Soreang - Ciwidey',
+                'contact' => '081234560003',
+                'opening_hours' => '07:00-17:00',
+                'ticket_price' => 50000,
+                'facilities' => 'Parkir Luas, Toilet, Mushola, Food Court, Souvenir Shop, Spot Foto',
+                'image' => 'https://picsum.photos/seed/tourism3/1200/800',
+                'latitude' => -7.1661,
+                'longitude' => 107.4024,
+                'is_featured' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'village_id' => 32040101,
+                'name' => 'Glamping Lakeside Rancabali',
+                'description' => 'Pengalaman camping dengan fasilitas mewah di tepi danau. Tenda dome dengan kasur empuk, pemandangan danau dan gunung. Termasuk BBQ dinner dan sarapan.',
+                'category' => 'buatan',
+                'address' => 'Situ Patenggang Area',
+                'contact' => '081234560004',
+                'opening_hours' => '24 Jam (Reservasi)',
+                'ticket_price' => 450000,
+                'facilities' => 'Tenda Dome, Kamar Mandi Bersih, Restoran, Api Unggun, Parkir',
+                'image' => 'https://picsum.photos/seed/tourism4/1200/800',
+                'latitude' => -7.1589,
+                'longitude' => 107.3876,
+                'is_featured' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Kuta
+            [
+                'village_id' => 51080101,
+                'name' => 'Pantai Kuta',
+                'description' => 'Pantai legendaris dengan pasir putih dan sunset yang memukau. Spot surfing internasional dengan ombak yang cocok untuk pemula hingga profesional. Area ramai dengan café, restoran, dan toko souvenir.',
+                'category' => 'alam',
+                'address' => 'Jl. Pantai Kuta',
+                'contact' => '081234560005',
+                'opening_hours' => '24 Jam',
+                'ticket_price' => 0,
+                'facilities' => 'Parkir, Toilet, Shower, Penyewaan Surfboard, Restoran, Lifeguard',
+                'image' => 'https://picsum.photos/seed/tourism5/1200/800',
+                'latitude' => -8.7184,
+                'longitude' => 115.1686,
+                'is_featured' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'village_id' => 51080101,
+                'name' => 'Waterbom Bali',
+                'description' => 'Taman air terbaik di Asia dengan berbagai wahana air yang menantang dan menyenangkan untuk segala usia. Terletak di jantung Kuta dengan konsep tropical garden.',
+                'category' => 'buatan',
+                'address' => 'Jl. Kartika Plaza Kuta',
+                'contact' => '081234560006',
+                'opening_hours' => '09:00-18:00',
+                'ticket_price' => 450000,
+                'facilities' => 'Waterboom, Loker, Restoran, Toilet, Shower, Parkir',
+                'image' => 'https://picsum.photos/seed/tourism6/1200/800',
+                'latitude' => -8.7203,
+                'longitude' => 115.1728,
+                'is_featured' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Ubud
+            [
+                'village_id' => 51080301,
+                'name' => 'Tegalalang Rice Terrace',
+                'description' => 'Sawah terasering terindah di Bali dengan sistem irigasi subak tradisional. Pemandangan hijau yang memukau dan spot foto Instagram-able. Terdapat swing (ayunan) di atas sawah.',
+                'category' => 'alam',
+                'address' => 'Jl. Raya Tegalalang',
+                'contact' => '081234560007',
+                'opening_hours' => '08:00-18:00',
+                'ticket_price' => 20000,
+                'facilities' => 'Parkir, Toilet, Café, Swing, Spot Foto, Souvenir Shop',
+                'image' => 'https://picsum.photos/seed/tourism7/1200/800',
+                'latitude' => -8.4353,
+                'longitude' => 115.2823,
+                'is_featured' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'village_id' => 51080301,
+                'name' => 'Monkey Forest Ubud',
+                'description' => 'Hutan lindung dengan populasi lebih dari 700 ekor monyet ekor panjang Bali. Terdapat 3 pura suci dan jalan setapak yang indah di tengah hutan tropis.',
+                'category' => 'alam',
+                'address' => 'Jl. Monkey Forest Ubud',
+                'contact' => '081234560008',
+                'opening_hours' => '08:30-18:00',
+                'ticket_price' => 80000,
+                'facilities' => 'Parkir, Toilet, Information Center, Clinic, Pura',
+                'image' => 'https://picsum.photos/seed/tourism8/1200/800',
+                'latitude' => -8.5193,
+                'longitude' => 115.2587,
+                'is_featured' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'village_id' => 51080301,
+                'name' => 'Campuhan Ridge Walk',
+                'description' => 'Jalur trekking sepanjang 2km dengan pemandangan perbukitan hijau dan sungai. Jalur mudah dan cocok untuk morning walk atau jogging. GRATIS!',
+                'category' => 'alam',
+                'address' => 'Jl. Raya Campuhan',
+                'contact' => '081234560009',
+                'opening_hours' => '06:00-18:00',
+                'ticket_price' => 0,
+                'facilities' => 'Jalur Trekking, View Point',
+                'image' => 'https://picsum.photos/seed/tourism9/1200/800',
+                'latitude' => -8.5058,
+                'longitude' => 115.2563,
+                'is_featured' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Mengwi
+            [
+                'village_id' => 51080201,
+                'name' => 'Pura Taman Ayun',
+                'description' => 'Pura kerajaan Mengwi yang merupakan Situs Warisan Dunia UNESCO. Arsitektur tradisional Bali dengan taman yang indah dan kolam teratai. Tempat suci yang wajib dikunjungi.',
+                'category' => 'budaya',
+                'address' => 'Jl. Ayodya No.10 Mengwi',
+                'contact' => '081234560010',
+                'opening_hours' => '08:00-18:00',
+                'ticket_price' => 30000,
+                'facilities' => 'Parkir, Toilet, Guide, Museum, Taman',
+                'image' => 'https://picsum.photos/seed/tourism10/1200/800',
+                'latitude' => -8.5506,
+                'longitude' => 115.1719,
+                'is_featured' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ];
+
+        foreach ($tourisms as $tourism) {
+            DB::table('tourisms')->insert($tourism);
+        }
+    }
+}

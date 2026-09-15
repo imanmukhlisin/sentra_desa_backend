@@ -1,0 +1,146 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class BumdesSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $bumdes = [
+            // Desa Nanggung
+            [
+                'village_id' => 32010101,
+                'name' => 'BUMDes Nanggung Jaya',
+                'description' => 'BUMDes yang fokus pada pengembangan pertanian organik dan pengolahan hasil pertanian. Mengelola unit usaha simpan pinjam untuk modal usaha warga.',
+                'director' => 'Bapak Suparman',
+                'established_date' => '2019-03-15',
+                'capital' => 500000000,
+                'business_units' => 'Simpan Pinjam, Pertanian Organik, Pengolahan Hasil Tani',
+                'phone' => '081234550001',
+                'address' => 'Kantor Desa Nanggung',
+                'image' => 'https://picsum.photos/seed/bumdes1/800/600',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Malasari
+            [
+                'village_id' => 32010102,
+                'name' => 'BUMDes Malasari Mandiri',
+                'description' => 'BUMDes yang mengelola ekowisata dan homestay di kawasan Gunung Halimun. Memberikan pelatihan pemandu wisata lokal dan pengelolaan homestay kepada warga.',
+                'director' => 'Bapak Agus Setiawan',
+                'established_date' => '2020-06-22',
+                'capital' => 350000000,
+                'business_units' => 'Ekowisata, Homestay, Pusat Informasi Wisata',
+                'phone' => '081234550002',
+                'address' => 'Kampung Malasari RT 01/01',
+                'image' => 'https://picsum.photos/seed/bumdes2/800/600',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Ciampea
+            [
+                'village_id' => 32010301,
+                'name' => 'BUMDes Ciampea Kreatif',
+                'description' => 'BUMDes yang mengembangkan industri kreatif kerajinan bambu. Memiliki showroom dan galeri produk, serta memberikan pelatihan kerajinan kepada generasi muda.',
+                'director' => 'Ibu Siti Nurjanah',
+                'established_date' => '2018-08-10',
+                'capital' => 750000000,
+                'business_units' => 'Showroom Kerajinan, Pelatihan, Workshop Bambu, Export',
+                'phone' => '081234550003',
+                'address' => 'Jl. Raya Ciampea KM 5',
+                'image' => 'https://picsum.photos/seed/bumdes3/800/600',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Alamendah
+            [
+                'village_id' => 32040101,
+                'name' => 'BUMDes Alamendah Sejahtera',
+                'description' => 'BUMDes yang mengelola destinasi wisata alam dan agrowisata. Bekerjasama dengan pengelola Kawah Putih dan mengembangkan homestay di kawasan wisata.',
+                'director' => 'Bapak Dedi Hermawan',
+                'established_date' => '2017-11-05',
+                'capital' => 1200000000,
+                'business_units' => 'Pengelolaan Wisata, Homestay, Agrowisata, Restoran',
+                'phone' => '081234550004',
+                'address' => 'Kantor Desa Alamendah',
+                'image' => 'https://picsum.photos/seed/bumdes4/800/600',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Alam Endah
+            [
+                'village_id' => 32040201,
+                'name' => 'BUMDes Rancabali Agro',
+                'description' => 'BUMDes yang fokus pada pengembangan agrowisata strawberry dan sayuran hidroponik. Mengelola kebun petik strawberry dan café dengan produk olahan strawberry.',
+                'director' => 'Ibu Dewi Lestari',
+                'established_date' => '2019-04-20',
+                'capital' => 850000000,
+                'business_units' => 'Kebun Strawberry, Café, Olahan Strawberry, Paket Wisata',
+                'phone' => '081234550005',
+                'address' => 'Jl. Rancabali KM 10',
+                'image' => 'https://picsum.photos/seed/bumdes5/800/600',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Kuta
+            [
+                'village_id' => 51080101,
+                'name' => 'BUMDes Kuta Maju',
+                'description' => 'BUMDes yang mengelola pasar seni dan pusat kuliner tradisional. Memfasilitasi UMKM lokal dengan tempat usaha strategis di area wisata.',
+                'director' => 'Bapak I Made Wirawan',
+                'established_date' => '2016-01-15',
+                'capital' => 2500000000,
+                'business_units' => 'Pasar Seni, Food Court, Pengelolaan Lahan Parkir, Event Organizer',
+                'phone' => '081234550006',
+                'address' => 'Jl. Pantai Kuta No. 123',
+                'image' => 'https://picsum.photos/seed/bumdes6/800/600',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Ubud
+            [
+                'village_id' => 51080301,
+                'name' => 'BUMDes Ubud Lestari',
+                'description' => 'BUMDes yang mengembangkan wisata budaya dan seni. Mengelola sanggar seni, museum mini, dan paket wisata cultural experience untuk wisatawan.',
+                'director' => 'Bapak Nyoman Sudarsana',
+                'established_date' => '2015-09-08',
+                'capital' => 1800000000,
+                'business_units' => 'Sanggar Seni, Cultural Tour, Cooking Class, Art Gallery',
+                'phone' => '081234550007',
+                'address' => 'Jl. Raya Ubud No. 45',
+                'image' => 'https://picsum.photos/seed/bumdes7/800/600',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
+            // Desa Mengwi
+            [
+                'village_id' => 51080201,
+                'name' => 'BUMDes Mengwi Bersama',
+                'description' => 'BUMDes yang mengelola kawasan heritage Pura Taman Ayun dan mengembangkan pertanian organik sistem subak. Melestarikan budaya sambil meningkatkan ekonomi warga.',
+                'director' => 'Bapak I Ketut Sujana',
+                'established_date' => '2018-03-12',
+                'capital' => 1100000000,
+                'business_units' => 'Pengelolaan Area Pura, Pertanian Subak, Souvenir Shop, Café Heritage',
+                'phone' => '081234550008',
+                'address' => 'Kantor Desa Mengwi',
+                'image' => 'https://picsum.photos/seed/bumdes8/800/600',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ];
+
+        foreach ($bumdes as $item) {
+            DB::table('bumdes')->insert($item);
+        }
+    }
+}

@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Filament\Resources\RegencyResource\Pages;
+
+use App\Filament\Resources\RegencyResource;
+use Filament\Resources\Pages\CreateRecord;
+
+class CreateRegency extends CreateRecord
+{
+    protected static string $resource = RegencyResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+}

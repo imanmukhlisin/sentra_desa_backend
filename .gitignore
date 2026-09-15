@@ -1,0 +1,57 @@
+# ============================================
+# Laravel Backend .gitignore
+# ============================================
+
+# Environment & Secrets
+.env
+.env.backup
+.env.production
+auth.json
+
+# Dependencies
+/vendor/
+/node_modules/
+/public/_laravel-brain/
+
+# Build outputs
+/public/hot
+/public/storage
+/public/build/
+
+# Storage (keep structure, ignore contents)
+/storage/*.key
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+
+# Bootstrap cache
+/bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+
+# Testing
+.phpunit.result.cache
+.phpunit.cache/
+/coverage/
+
+# IDE
+/.idea/
+/.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Debug logs
+npm-debug.log
+yarn-error.log
+
+# Homestead / Sail
+Homestead.json
+Homestead.yaml
+docker-compose.override.yml
+.sail/
