@@ -1,6 +1,6 @@
 # 📑 API Contract - Sentra-Desa.id (v1)
 
-Dokumentasi spesifikasi antarmuka pemrograman aplikasi (API Contract) resmi untuk platform **Sentra-Desa.id**. Dokumen ini menjadi acuan utama integrasi antara **Backend (Laravel 12 / Sanctum)** dan **Frontend (Next.js / Flutter)**.
+Dokumentasi spesifikasi antarmuka pemrograman aplikasi (API Contract) resmi untuk platform **Sentra-Desa.id**. Dokumen ini menjadi acuan utama integrasi antara **Backend (Laravel 12 / Sanctum)** dan **Frontend (Next.js / Flutter)**, serta diselaraskan langsung dengan **Notion Project Tracker**.
 
 ---
 
@@ -67,28 +67,54 @@ Dokumentasi spesifikasi antarmuka pemrograman aplikasi (API Contract) resmi untu
 
 ---
 
-## 🧭 PANDUAN LENGKAP SPESIFIKASI 11 MODUL DESA KITA
+## 📋 TABEL MASTER TASK NOTION (PROJECT TRACKER MAPPING)
 
-Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampilkan pada beranda Sentra Desa:
+Tabel di bawah ini diselaraskan **100% persis** dengan properti dan opsi dropdown `Module / Feature` di Notion:
 
-1. [Modul 1: Profil Desa (Desa Kita)](#modul-1-profil-desa-desa-kita)
-2. [Modul 2: Potensi Desa](#modul-2-potensi-desa)
-3. [Modul 3: Layanan & Informasi Desa](#modul-3-layanan--informasi-desa)
-4. [Modul 4: Sentra Produk (Katalog UMKM)](#modul-4-sentra-produk-katalog-umkm)
-5. [Modul 5: Desa Ekspor](#modul-5-desa-ekspor)
-6. [Modul 6: Desa Wisata](#modul-6-desa-wisata)
-7. [Modul 7: BUMDES (Badan Usaha Milik Desa)](#modul-7-bumdes-badan-usaha-milik-desa)
-8. [Modul 8: KDMP (Koperasi Desa Merah Putih)](#modul-8-kdmp-koperasi-desa-merah-putih)
-9. [Modul 9: LKDD (Laporan Keuangan Dana Desa)](#modul-9-lkdd-laporan-keuangan-dana-desa)
-10. [Modul 10: Artikel & Warta Desa](#modul-10-artikel--warta-desa)
-11. [Modul 11: Wishlist Desa (Kebutuhan Pembangunan)](#modul-11-wishlist-desa-kebutuhan-pembangunan)
+| Task Name | Module / Feature | Priority | Related API Endpoint | Sprint / Phase |
+| :--- | :--- | :---: | :--- | :--- |
+| **Integrasi List Desa Terverifikasi & Filter Wilayah** | `Profile Desa` | P0 | `GET /v1/public/villages` | Sprint 1 |
+| **Integrasi Detail Profil Desa Lengkap (Visi Misi & Preview Modul)** | `Profile Desa` | P1 | `GET /v1/public/villages/{id}/profile` | Sprint 1 |
+| **Integrasi List & Filter Potensi Desa** | `Potensi Desa` | P1 | `GET /v1/public/village-potentials` | Sprint 1 |
+| **Integrasi Detail Potensi & Status Investasi Desa** | `Potensi Desa` | P2 | `GET /v1/public/village-potentials/{id}` | Sprint 1 |
+| **Integrasi Direktori Layanan Surat & Administrasi Warga** | `Informasi Desa` | P1 | `GET /v1/public/village-services` | Sprint 1 |
+| **Integrasi Pengumuman Warta & Informasi Desa** | `Informasi Desa` | P2 | `GET /v1/public/contents` | Sprint 1 |
+| **Integrasi Katalog Sentra Produk (Kategori, Search, Filter Wilayah)** | `Sentra Produk` | P0 | `GET /v1/public/products` | Sprint 1 |
+| **Integrasi Halaman Detail Produk & Kontak WhatsApp Toko** | `Sentra Produk` | P0 | `GET /v1/public/products/{slug}` | Sprint 1 |
+| **Integrasi Form Tambah Produk Baru UMKM (Multi-Image)** | `Sentra Produk` | P1 | `POST /v1/umkm/products` | Sprint 2 |
+| **Integrasi Katalog Komoditas Siap Ekspor & HS Code** | `Desa Ekspor` | P1 | `GET /v1/public/export-products` | Sprint 1 |
+| **Integrasi Detail Komoditas Ekspor & Info Kontak Koperasi** | `Desa Ekspor` | P2 | `GET /v1/public/export-products/{slug}` | Sprint 1 |
+| **Integrasi Direktori Desa Wisata & Filter Kategori** | `Desa Wisata` | P1 | `GET /v1/public/tourisms` | Sprint 1 |
+| **Integrasi Detail Destinasi Wisata, Tiket, Fasilitas & Peta Maps** | `Desa Wisata` | P1 | `GET /v1/public/tourisms/{slug}` | Sprint 1 |
+| **Integrasi Profil BUMDes & Unit Usaha Aktif** | `BUMDES` | P1 | `GET /v1/public/bumdes` | Sprint 1 |
+| **Integrasi Detail BUMDes, Legalitas AHU & Performa Usaha** | `BUMDES` | P2 | `GET /v1/public/bumdes/{slug}` | Sprint 1 |
+| **Integrasi Direktori Koperasi Desa Merah Putih (KDMP)** | `KDMP` | P1 | `GET /v1/public/kdmp` | Sprint 1 |
+| **Integrasi Detail KDMP, Legalitas & Unit Usaha Koperasi** | `KDMP` | P2 | `GET /v1/public/kdmp/{code}` | Sprint 1 |
+| **Integrasi Transparansi Dana Desa & Infografis APBDes (LKDD)** | `LKDD` | P1 | `GET /v1/public/lkdd` | Sprint 1 |
+| **Integrasi Detail Realisasi Anggaran Belanja & SilPA LKDD** | `LKDD` | P2 | `GET /v1/public/lkdd/{id}` | Sprint 1 |
+| **Integrasi Berita Warta Desa & Kategori Artikel** | `Artikel` | P2 | `GET /v1/public/articles` | Sprint 1 |
+| **Integrasi Halaman Baca Artikel Desa** | `Artikel` | P2 | `GET /v1/public/articles/{slug}` | Sprint 1 |
+| **Integrasi Usulan Kebutuhan Sarana Wishlist Desa** | `Wishlist Desa` | P1 | `GET /v1/public/wishlists` | Sprint 1 |
+| **Integrasi Detail Wishlist Desa & Form Donasi Sarana** | `Wishlist Desa` | P2 | `GET /v1/public/wishlists/{id}` | Sprint 2 |
+| **Integrasi Login User Warga (Single-Session Token)** | `Login User` | P0 | `POST /v1/public/login` | Sprint 1 |
+| **Integrasi Registrasi Member Warga Baru** | `Login User` | P0 | `POST /v1/public/register` | Sprint 1 |
+| **Integrasi Form Pendaftaran Merchant UMKM + Upload Bukti** | `Login UMKM` | P0 | `POST /v1/umkm/merchant/register` | Sprint 1 |
+| **Integrasi Cek Status Toko & Kartu Sisa Hari Membership UMKM** | `Login UMKM` | P1 | `GET /v1/umkm/merchant` | Sprint 2 |
+| **Integrasi Form Perpanjangan Toko / Renewal Membership UMKM** | `Login UMKM` | P1 | `POST /v1/umkm/merchant/renew` | Sprint 2 |
+| **Integrasi Form Pengajuan Pendaftaran Admin Desa Baru** | `Login Desa` | P1 | `POST /v1/public/register-village` | Sprint 2 |
+| **Integrasi Verifikasi Toko UMKM oleh Admin Desa** | `Login Desa` | P1 | `POST /v1/village/merchants/{id}/approve` | Sprint 2 |
 
 ---
 
-### MODUL 1: PROFIL DESA (DESA KITA)
+## 🧭 RINCIAN SPESIFIKASI API PER MODUL NOTION
+
+---
+
+### MODUL: Profile Desa
+> **Label Notion:** `Profile Desa`  
 > **Kegunaan:** Direktori desa terverifikasi se-Indonesia dan etalase agregasi profil desa lengkap (visi/misi, demografi, aparatur, serta preview komoditas/produk).
 
-#### 1.1 List Desa Terverifikasi
+#### 1. List Desa Terverifikasi
 - **Method & URL:** `GET /v1/public/villages`
 - **Query Parameters:**
   | Parameter | Tipe | Keterangan |
@@ -137,7 +163,7 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 1.2 Detail Agregasi Profil Desa
+#### 2. Detail Agregasi Profil Desa
 - **Method & URL:** `GET /v1/public/villages/{village_id}/profile`
 - **Response JSON (200 OK):**
 ```json
@@ -180,10 +206,11 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 
 ---
 
-### MODUL 2: POTENSI DESA
+### MODUL: Potensi Desa
+> **Label Notion:** `Potensi Desa`  
 > **Kegunaan:** Menampilkan potensi komoditas, lahan, nilai estimasi ekonomi tahunan, dan status kesiapan investasi bagi calon investor.
 
-#### 2.1 List Potensi Desa
+#### 1. List Potensi Desa
 - **Method & URL:** `GET /v1/public/village-potentials`
 - **Query Parameters:** `category`, `village_id`, `search`, `per_page`
 - **Response JSON (200 OK):**
@@ -220,16 +247,17 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 2.2 Detail Potensi Desa
+#### 2. Detail Potensi Desa
 - **Method & URL:** `GET /v1/public/village-potentials/{id}`
-- **Response JSON (200 OK):** Mengembalikan objek data tunggal seperti di atas.
+- **Response JSON (200 OK):** Mengembalikan objek data tunggal potensi desa.
 
 ---
 
-### MODUL 3: LAYANAN & INFORMASI DESA
+### MODUL: Informasi Desa
+> **Label Notion:** `Informasi Desa`  
 > **Kegunaan:** Direktori persyaratan surat menyurat warga (SKU, SKCK, Domisili), estimasi waktu proses, dan pengumuman warta desa.
 
-#### 3.1 List Layanan Administrasi Publik
+#### 1. List Layanan Administrasi Publik
 - **Method & URL:** `GET /v1/public/village-services`
 - **Query Parameters:** `village_id`, `category`, `search`
 - **Response JSON (200 OK):**
@@ -266,7 +294,7 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 3.2 List Warta & Informasi Desa
+#### 2. List Warta & Informasi Desa
 - **Method & URL:** `GET /v1/public/contents`
 - **Query Parameters:** `village_id`, `category` (default: `informasi`), `search`
 - **Response JSON (200 OK):**
@@ -288,10 +316,11 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 
 ---
 
-### MODUL 4: SENTRA PRODUK (KATALOG UMKM)
+### MODUL: Sentra Produk
+> **Label Notion:** `Sentra Produk`  
 > **Kegunaan:** Katalog e-commerce produk hasil karya UMKM desa dengan filter kategori, wilayah bertingkat, stok, dan kontak pedagang.
 
-#### 4.1 List Produk Publik
+#### 1. List Produk Publik
 - **Method & URL:** `GET /v1/public/products`
 - **Query Parameters:**
   - `category`: `makanan_minuman`, `kerajinan`, `fashion`, `pertanian`, `perikanan`, `peternakan`, `jasa`, `lainnya`
@@ -342,11 +371,11 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 4.2 Detail Produk
+#### 2. Detail Produk
 - **Method & URL:** `GET /v1/public/products/{slug_or_id}`
-- **Response JSON (200 OK):** Mengembalikan objek produk tunggal lengkap dengan relasi toko dan wilayah.
+- **Response JSON (200 OK):** Mengembalikan objek produk tunggal lengkap.
 
-#### 4.3 Tambah Produk Baru (Role: UMKM)
+#### 3. Tambah Produk Baru (Role: UMKM)
 - **Method & URL:** `POST /v1/umkm/products`
 - **Auth:** `Bearer Token` (Role: `umkm`, Status Merchant: `approved`)
 - **Request Body (Multipart Form-Data):**
@@ -355,7 +384,7 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
   - `description` (string, required)
   - `category` (enum, required)
   - `stock` (integer, optional)
-  - `unit` (string, optional - cth: "pcs", "botol", "kg")
+  - `unit` (string, optional)
   - `weight` (numeric dalam gram, optional)
   - `image` (file image, max 2048KB)
   - `gallery[]` (array file image, max 4 file)
@@ -376,10 +405,11 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 
 ---
 
-### MODUL 5: DESA EKSPOR
+### MODUL: Desa Ekspor
+> **Label Notion:** `Desa Ekspor`  
 > **Kegunaan:** Katalog komoditas desa siap ekspor lengkap dengan standar sertifikasi, HS Code, kapasitas volume bulanan, dan Minimal Order Quantity (MOQ).
 
-#### 5.1 List Komoditas Ekspor
+#### 1. List Komoditas Ekspor
 - **Method & URL:** `GET /v1/public/export-products`
 - **Query Parameters:** `village_id`, `search`, `per_page`
 - **Response JSON (200 OK):**
@@ -418,16 +448,17 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 5.2 Detail Produk Ekspor
+#### 2. Detail Produk Ekspor
 - **Method & URL:** `GET /v1/public/export-products/{slug_or_id}`
-- **Response JSON (200 OK):** Mengembalikan objek komoditas ekspor tunggal.
+- **Response JSON (200 OK):** Mengembalikan data komoditas ekspor tunggal.
 
 ---
 
-### MODUL 6: DESA WISATA
+### MODUL: Desa Wisata
+> **Label Notion:** `Desa Wisata`  
 > **Kegunaan:** Direktori destinasi desa wisata, agrowisata, wisata budaya, harga tiket masuk (HTM), jam buka, koordinat Google Maps, dan fasilitas.
 
-#### 6.1 List Destinasi Wisata
+#### 1. List Destinasi Wisata
 - **Method & URL:** `GET /v1/public/tourisms`
 - **Query Parameters:** `category`, `province_id`, `regency_id`, `search`, `per_page`
 - **Response JSON (200 OK):**
@@ -467,16 +498,17 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 6.2 Detail Destinasi Wisata
+#### 2. Detail Destinasi Wisata
 - **Method & URL:** `GET /v1/public/tourisms/{slug_or_id}`
 - **Response JSON (200 OK):** Mengembalikan objek wisata tunggal lengkap.
 
 ---
 
-### MODUL 7: BUMDES (BADAN USAHA MILIK DESA)
+### MODUL: BUMDES
+> **Label Notion:** `BUMDES`  
 > **Kegunaan:** Profil legalitas Badan Usaha Milik Desa (AHU Kemenkumham), jajaran pengurus, modal awal, unit usaha aktif, dan performa keuangan.
 
-#### 7.1 List BUMDes
+#### 1. List BUMDes
 - **Method & URL:** `GET /v1/public/bumdes`
 - **Query Parameters:** `village_id`, `search`, `per_page`
 - **Response JSON (200 OK):**
@@ -519,16 +551,17 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 7.2 Detail BUMDes
+#### 2. Detail BUMDes
 - **Method & URL:** `GET /v1/public/bumdes/{slug_or_id}`
 - **Response JSON (200 OK):** Mengembalikan objek data BUMDes tunggal.
 
 ---
 
-### MODUL 8: KDMP (KOPERASI DESA MERAH PUTIH)
-> **Kegunaan:** Menampilkan profil Koperasi Desa Mandiri Pangan / Koperasi Desa Merah Putih, nomor legalitas, aset, dan unit usaha koperasi.
+### MODUL: KDMP
+> **Label Notion:** `KDMP`  
+> **Kegunaan:** Menampilkan profil Koperasi Desa Merah Putih, nomor legalitas badan hukum, kepengurusan, total aset, dan unit usaha koperasi.
 
-#### 8.1 List Koperasi Desa
+#### 1. List Koperasi Desa
 - **Method & URL:** `GET /v1/public/kdmp`
 - **Query Parameters:** `village_id`, `status` (`aktif`, `dalam_pembinaan`), `search`, `per_page`
 - **Response JSON (200 OK):**
@@ -568,16 +601,17 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 8.2 Detail Koperasi Desa
+#### 2. Detail Koperasi Desa
 - **Method & URL:** `GET /v1/public/kdmp/{code_or_id}`
-- **Response JSON (200 OK):** Mengembalikan objek data koperasi tunggal.
+- **Response JSON (200 OK):** Mengembalikan data koperasi tunggal.
 
 ---
 
-### MODUL 9: LKDD (LAPORAN KEUANGAN DANA DESA)
+### MODUL: LKDD
+> **Label Notion:** `LKDD`  
 > **Kegunaan:** Portal transparansi APBDes dan realisasi Dana Desa (APBN, PADes, ADD) per bidang belanja (pemerintahan, pembangunan, pembinaan, kebencanaan).
 
-#### 9.1 List Laporan Keuangan Desa
+#### 1. List Laporan Keuangan Desa
 - **Method & URL:** `GET /v1/public/lkdd`
 - **Query Parameters:** `fiscal_year` (tahun anggaran), `province_id`, `regency_id`, `district_id`, `village_id`, `search`, `per_page`
 - **Response JSON (200 OK):**
@@ -622,16 +656,17 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 9.2 Detail Laporan Keuangan Desa
+#### 2. Detail Laporan Keuangan Desa
 - **Method & URL:** `GET /v1/public/lkdd/{id}`
-- **Response JSON (200 OK):** Mengembalikan objek laporan keuangan tunggal.
+- **Response JSON (200 OK):** Mengembalikan data laporan keuangan tunggal.
 
 ---
 
-### MODUL 10: ARTIKEL & WARTA DESA
+### MODUL: Artikel
+> **Label Notion:** `Artikel`  
 > **Kegunaan:** Publikasi berita kegiatan gotong royong, edukasi pertanian UMKM, dan siaran pers dari pemerintah desa.
 
-#### 10.1 List Artikel Berita Desa
+#### 1. List Artikel Berita Desa
 - **Method & URL:** `GET /v1/public/articles`
 - **Query Parameters:** `category`, `village_id`, `featured` (`1`), `search`, `per_page`
 - **Response JSON (200 OK):**
@@ -665,16 +700,17 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 10.2 Detail Artikel Berita
+#### 2. Detail Artikel Berita
 - **Method & URL:** `GET /v1/public/articles/{slug}`
-- **Response JSON (200 OK):** Mengembalikan objek artikel tunggal lengkap.
+- **Response JSON (200 OK):** Mengembalikan data artikel tunggal lengkap.
 
 ---
 
-### MODUL 11: WISHLIST DESA (KEBUTUHAN PEMBANGUNAN)
-> **Kegunaan:** Sarana publikasi usulan kebutuhan mendesak desa (alat tani, jembatan, sarana kesehatan) yang membuka peluang dukungan dari donatur atau program CSR perusahaan.
+### MODUL: Wishlist Desa
+> **Label Notion:** `Wishlist Desa`  
+> **Kegunaan:** Sarana publikasi usulan kebutuhan mendesak desa (alat tani, mesin pengering, jembatan, sarana kesehatan) yang membuka peluang dukungan dari donatur atau program CSR perusahaan.
 
-#### 11.1 List Wishlist Kebutuhan Desa
+#### 1. List Wishlist Kebutuhan Desa
 - **Method & URL:** `GET /v1/public/wishlists`
 - **Query Parameters:** `category`, `status` (`open`, `fulfilled`, `closed`), `village_id`, `search`, `per_page`
 - **Response JSON (200 OK):**
@@ -712,24 +748,143 @@ Berikut adalah rincian API spesifik untuk **11 Modul Tematik Desa** yang ditampi
 }
 ```
 
-#### 11.2 Detail Wishlist Desa
+#### 2. Detail Wishlist Desa
 - **Method & URL:** `GET /v1/public/wishlists/{id}`
-- **Response JSON (200 OK):** Mengembalikan objek wishlist tunggal lengkap.
+- **Response JSON (200 OK):** Mengembalikan data wishlist tunggal lengkap.
 
 ---
 
-## 🛠️ Ringkasan Tabel Rute API 11 Modul untuk Tim Frontend
+### MODUL: Login User
+> **Label Notion:** `Login User`  
+> **Kegunaan:** Autentikasi dan pendaftaran mandiri member warga/pembeli umum berbasis Single-Session Sanctum Token.
 
-| No | Modul Navigasi | URL Halaman Frontend | Method & Endpoint Backend |
-| :---: | :--- | :--- | :--- |
-| **1** | **Profil Desa** | `/profil-desa` | `GET /v1/public/villages`<br>`GET /v1/public/villages/{id}/profile` |
-| **2** | **Potensi Desa** | `/potensi-desa` | `GET /v1/public/village-potentials`<br>`GET /v1/public/village-potentials/{id}` |
-| **3** | **Layanan Desa** | `/layanan-desa` | `GET /v1/public/village-services`<br>`GET /v1/public/contents` |
-| **4** | **Sentra Produk** | `/sentra-produk` | `GET /v1/public/products`<br>`GET /v1/public/products/{slug}` |
-| **5** | **Desa Ekspor** | `/desa-ekspor` | `GET /v1/public/export-products`<br>`GET /v1/public/export-products/{slug}` |
-| **6** | **Desa Wisata** | `/desa-wisata` | `GET /v1/public/tourisms`<br>`GET /v1/public/tourisms/{slug}` |
-| **7** | **BUMDES** | `/bumdes` | `GET /v1/public/bumdes`<br>`GET /v1/public/bumdes/{slug}` |
-| **8** | **KDMP** | `/kdmp` | `GET /v1/public/kdmp`<br>`GET /v1/public/kdmp/{code}` |
-| **9** | **LKDD** | `/lkdd` | `GET /v1/public/lkdd`<br>`GET /v1/public/lkdd/{id}` |
-| **10** | **Artikel** | `/artikel` | `GET /v1/public/articles`<br>`GET /v1/public/articles/{slug}` |
-| **11** | **Wishlist Desa** | `/wishlist` | `GET /v1/public/wishlists`<br>`GET /v1/public/wishlists/{id}` |
+#### 1. Registrasi Warga Baru
+- **Method & URL:** `POST /v1/public/register`
+- **Request Body:**
+```json
+{
+  "name": "Budi Santoso",
+  "email": "budi@example.com",
+  "password": "password123"
+}
+```
+- **Response JSON (201 Created):**
+```json
+{
+  "status": "success",
+  "message": "Pendaftaran berhasil!",
+  "access_token": "1|qWeRtYuIoP1234567890abcdef",
+  "user": {
+    "id": 12,
+    "name": "Budi Santoso",
+    "email": "budi@example.com"
+  }
+}
+```
+
+#### 2. Login User (Single-Session)
+- **Method & URL:** `POST /v1/public/login`
+- **Request Body:**
+```json
+{
+  "email": "budi@example.com",
+  "password": "password123"
+}
+```
+- **Response JSON (200 OK):** Mengembalikan `access_token` baru dan mencabut token di perangkat lain.
+
+---
+
+### MODUL: Login UMKM
+> **Label Notion:** `Login UMKM`  
+> **Kegunaan:** Pendaftaran member pelaku usaha desa, upload bukti legalitas/pembayaran, dan pengelolaan masa aktif keanggotaan toko (membership).
+
+#### 1. Pendaftaran Merchant UMKM Baru
+- **Method & URL:** `POST /v1/umkm/merchant/register`
+- **Auth:** `Bearer Token`
+- **Request Body (Multipart Form-Data):**
+  - `store_name` (string, required)
+  - `village_id` (integer, required)
+  - `address` (string, required)
+  - `phone` (string, required)
+  - `description` (string, optional)
+  - `business_type` (string, optional)
+  - `established_year` (string, optional)
+  - `logo` (file image, optional, max 2048KB)
+  - `payment_proof` (file image, optional, max 2048KB)
+- **Response JSON (201 Created):**
+```json
+{
+  "status": "success",
+  "message": "Pendaftaran merchant berhasil dikirim, menunggu persetujuan admin.",
+  "data": {
+    "id": 6,
+    "store_name": "Warung Keripik Bu Ani",
+    "status": "pending",
+    "village": {
+      "name": "Panundaan"
+    }
+  }
+}
+```
+
+#### 2. Cek Status Toko & Sisa Masa Aktif Membership
+- **Method & URL:** `GET /v1/umkm/merchant`
+- **Auth:** `Bearer Token` (Role: `umkm`)
+- **Response JSON (200 OK):**
+```json
+{
+  "status": "success",
+  "data": {
+    "id": 6,
+    "store_name": "Warung Keripik Bu Ani",
+    "status": "approved",
+    "approved_at": "2026-09-17 10:00:00",
+    "membership_expires_at": "2027-09-17 10:00:00",
+    "renewal_status": "none"
+  }
+}
+```
+
+#### 3. Permintaan Perpanjangan Toko (Renewal)
+- **Method & URL:** `POST /v1/umkm/merchant/renew`
+- **Auth:** `Bearer Token`
+- **Request Body (Multipart Form-Data):** `renewal_proof` (file image, max 2048KB)
+- **Response JSON (200 OK):**
+```json
+{
+  "status": "success",
+  "message": "Permintaan perpanjangan berhasil dikirim.",
+  "data": {
+    "renewal_status": "pending"
+  }
+}
+```
+
+---
+
+### MODUL: Login Desa
+> **Label Notion:** `Login Desa`  
+> **Kegunaan:** Pengajuan pendaftaran aparatur desa dan verifikasi toko UMKM oleh pemerintah desa.
+
+#### 1. Verifikasi / Approval Toko UMKM oleh Admin Desa
+- **Method & URL:** `POST /v1/village/merchants/{id}/approve`
+- **Auth:** `Bearer Token` (Role: `village_admin`)
+- **Response JSON (200 OK):**
+```json
+{
+  "status": "success",
+  "message": "Merchant approved, membership aktif 1 tahun"
+}
+```
+
+#### 2. Tolak Pendaftaran Toko UMKM
+- **Method & URL:** `POST /v1/village/merchants/{id}/reject`
+- **Auth:** `Bearer Token` (Role: `village_admin`)
+- **Response JSON (200 OK):**
+```json
+{
+  "status": "success",
+  "message": "Merchant rejected"
+}
+```
