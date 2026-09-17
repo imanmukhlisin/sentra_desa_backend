@@ -1,8 +1,8 @@
 # 📐 Diagram Arsitektur & Alur Bisnis Sistem - Sentra-Desa.id
 
-Dokumen ini memuat dokumentasi visual dan teknis seluruh alur bisnis platform **Sentra-Desa.id**, mencakup hak akses 4 peran pengguna (*Superadmin, Village Admin, UMKM, User/Buyer*), alur autentikasi, siklus pengelolaan 11 modul desa, hingga sistem pembayaran *Payment Gateway (Escrow)*.
+Dokumen ini memuat dokumentasi visual dan teknis seluruh alur bisnis platform **Sentra-Desa.id**, mencakup hak akses 4 peran pengguna (*Superadmin, Village Admin, UMKM, User/Buyer*), alur autentikasi, siklus pengelolaan 11 modul desa, sistem pembayaran *Payment Gateway*, **siklus keanggotaan/subscription UMKM & Desa**, serta **pemetaan kebutuhan layar (*screen mapping*) untuk frontend**.
 
-Seluruh diagram di bawah ini telah diselaraskan dan tervalidasi dengan implementasi kode pada repositori `sentra-desa-backend` (Laravel 12, Filament v3, dan Laravel Sanctum).
+Seluruh diagram di bawah ini telah diselaraskan dengan implementasi kode backend (`sentra-desa-backend`) berbasis Laravel 12, Filament v3, dan Laravel Sanctum.
 
 ---
 
@@ -10,10 +10,13 @@ Seluruh diagram di bawah ini telah diselaraskan dan tervalidasi dengan implement
 
 1. [Diagram 1: Alur Akses Sistem & Autentikasi (4 Peran)](#1-diagram-1-alur-akses-sistem--autentikasi-4-peran)
 2. [Diagram 2: Alur Onboarding & Verifikasi Merchant UMKM](#2-diagram-2-alur-onboarding--verifikasi-merchant-umkm)
-3. [Diagram 3: Matriks & Siklus Pengelolaan 11 Modul Fitur Desa](#3-diagram-3-matriks--siklus-pengelolaan-11-modul-fitur-desa)
-4. [Diagram 4: Alur Transaksi E-Commerce & Payment Gateway (Escrow)](#4-diagram-4-alur-transaksi-e-commerce--payment-gateway-escrow)
-5. [Diagram 5: Alur Crowdfunding Wishlist Desa & CSR Perusahaan](#5-diagram-5-alur-crowdfunding-wishlist-desa--csr-perusahaan)
-6. [Diagram 6: Arsitektur Geospatial & Cascading Wilayah](#6-diagram-6-arsitektur-geospatial--cascading-wilayah)
+3. [Diagram 3: Siklus Hidup Membership UMKM & Perpanjangan (Lifecycle & Renewal)](#3-diagram-3-siklus-hidup-membership-umkm--perpanjangan-lifecycle--renewal)
+4. [Diagram 4: Rancangan Model Subscription B2G untuk Pemerintah Desa](#4-diagram-4-rancangan-model-subscription-b2g-untuk-pemerintah-desa)
+5. [Diagram 5: Matriks & Siklus Pengelolaan 11 Modul Fitur Desa](#5-diagram-5-matriks--siklus-pengelolaan-11-modul-fitur-desa)
+6. [Diagram 6: Alur Transaksi E-Commerce & Payment Gateway (Escrow)](#6-diagram-6-alur-transaksi-e-commerce--payment-gateway-escrow)
+7. [Diagram 7: Alur Crowdfunding Wishlist Desa & CSR Perusahaan](#7-diagram-7-alur-crowdfunding-wishlist-desa--csr-perusahaan)
+8. [Diagram 8: Arsitektur Geospatial & Cascading Wilayah](#8-diagram-8-arsitektur-geospatial--cascading-wilayah)
+9. [Diagram 9: Blueprint Pemetaan Layar Frontend (Frontend Screen & State Blueprint)](#9-diagram-9-blueprint-pemetaan-layar-frontend-frontend-screen--state-blueprint)
 
 ---
 
@@ -47,7 +50,7 @@ flowchart TD
     
     %% Promosi Menjadi UMKM
     UserHome --> UpgradeUMKM{Mau Jual Produk Desa?}
-    UpgradeUMKM -->|Ya| SubmitMerchant[Isi Form Merchant + Upload Legalitas/Logo]
+    UpgradeUMKM -->|Ya| SubmitMerchant[Isi Form Merchant + Upload Legalitas/Logo/Bukti]
     SubmitMerchant --> StatusPending[Status Toko: PENDING]
     StatusPending --> ReviewVillage[Village Admin Meninjau di /admin]
     ReviewVillage -->|Disetujui| ActiveUMKM[Role Bertambah 'umkm' & Status 'APPROVED']
@@ -106,7 +109,79 @@ sequenceDiagram
 
 ---
 
-## 3. Diagram 3: Matriks & Siklus Pengelolaan 11 Modul Fitur Desa
+## 3. Diagram 3: Siklus Hidup Membership UMKM & Perpanjangan (Lifecycle & Renewal)
+
+Diagram ini menggambarkan status masa aktif toko UMKM dari awal mendaftar, aktif 1 tahun, kedaluwarsa, hingga perpanjangan:
+
+```mermaid
+stateDiagram-v2
+    [*] --> PENDING : Warga Submit Form & Bukti Daftar (POST /v1/umkm/merchant/register)
+    
+    PENDING --> REJECTED : Ditolak Admin Desa (POST /v1/village/merchants/{id}/reject)
+    PENDING --> APPROVED : Disetujui Admin Desa (POST /v1/village/merchants/{id}/approve)
+    
+    state APPROVED {
+        [*] --> ACTIVE : membership_expires_at = now() + 1 Tahun
+        ACTIVE --> EXPIRING_SOON : Sisa Masa Aktif <= 30 Hari
+        EXPIRING_SOON --> EXPIRED : membership_expires_at < now()
+    }
+    
+    EXPIRED --> RENEWAL_PENDING : UMKM Upload Bukti Bayar Perpanjangan (POST /v1/umkm/merchant/renew)
+    EXPIRING_SOON --> RENEWAL_PENDING : UMKM Perpanjang Dini
+    
+    RENEWAL_PENDING --> APPROVED : Admin Desa Setujui (membership_expires_at diperpanjang +1 Tahun)
+    RENEWAL_PENDING --> EXPIRED : Admin Desa Tolak Bukti Bayar
+```
+
+### 📋 Perbandingan Model Membership UMKM:
+```
++------------------------------------+------------------------------------+
+| 1. MODEL SAAT INI (Semi-Manual)    | 2. MODEL TARGET (Payment Gateway)  |
++------------------------------------+------------------------------------+
+| • UMKM transfer manual ke rekening | • UMKM klik tombol "Perpanjang"    |
+|   desa / BUMDes                    | • Muncul QRIS / Virtual Account PG |
+| • Upload foto struk bukti bayar    | • Begitu lunas, Webhook PG diterima|
+| • Admin Desa manual cek mutasi     | • membership_expires_at bertambah  |
+| • Admin klik tombol Approve        |   otomatis +1 tahun TANPA antre    |
++------------------------------------+------------------------------------+
+```
+
+---
+
+## 4. Diagram 4: Rancangan Model Subscription B2G untuk Pemerintah Desa
+
+Saat ini entitas Desa **BELUM** memiliki sistem subscription (statusnya hanya `is_verified` gratis dari Superadmin). Jika ke depan platform dimonetisasi sebagai **SaaS Pemerintah Desa (B2G)**, berikut adalah rancangan alur bisnisnya:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Kades as Kepala Desa / Sekdes
+    participant App as Portal Desa
+    participant API as Backend (Laravel)
+    participant PG as Payment Gateway / BJB / Bank Daerah
+    actor Superadmin as Superadmin Pusat
+
+    Kades->>App: 1. Registrasi Akun Desa Baru
+    App->>API: 2. Submit Data Desa, SK Kades, & Kontak Resmi
+    API-->>Superadmin: 3. Verifikasi Legalitas Wilayah (is_verified = true)
+    
+    Note over Kades,App: Pemilihan Paket Langganan Desa Digital
+    Kades->>App: 4. Pilih Paket Portal (Misal: Paket Digital Mandiri Rp 3 Juta/Tahun)
+    App->>API: 5. POST /v1/village/subscription/checkout
+    API->>PG: 6. Buat Invoice Tagihan Resmi (Virtual Account Pemda / QRIS APBDes)
+    PG-->>Kades: 7. Nomor VA / Invoice Pemda Terbit
+    
+    Kades->>PG: 8. Bendahara Desa Melunasi Pembayaran via SP2D / Internet Banking Pemda
+    PG-->>API: 9. Webhook: Pembayaran Langganan Desa Lunas
+    
+    API->>API: 10. Aktifkan Lisensi Desa:
+    Note over API: village_tier = 'premium'<br/>license_expires_at = now() + 1 tahun<br/>Buka akses Modul Ekspor, LKDD, & Domain Desa
+    API-->>App: 11. Seluruh Fitur Desa Premium Terbuka Penuh
+```
+
+---
+
+## 5. Diagram 5: Matriks & Siklus Pengelolaan 11 Modul Fitur Desa
 
 ### Matriks Tanggung Jawab Data (RACI):
 | No | Modul Fitur | Creator / Input | Validator / Approval | Konsumen Publik |
@@ -148,7 +223,7 @@ flowchart LR
 
 ---
 
-## 4. Diagram 4: Alur Transaksi E-Commerce & Payment Gateway (Escrow)
+## 6. Diagram 6: Alur Transaksi E-Commerce & Payment Gateway (Escrow)
 
 Arsitektur sistem pembayaran digital menggunakan rekening penampung aman (*Escrow*), terintegrasi dengan Payment Gateway (Midtrans / Xendit):
 
@@ -193,7 +268,7 @@ sequenceDiagram
 
 ---
 
-## 5. Diagram 5: Alur Crowdfunding Wishlist Desa & CSR Perusahaan
+## 7. Diagram 7: Alur Crowdfunding Wishlist Desa & CSR Perusahaan
 
 Alur penggalangan dukungan dan pembiayaan sarana/prasarana fisik desa:
 
@@ -230,7 +305,7 @@ sequenceDiagram
 
 ---
 
-## 6. Diagram 6: Arsitektur Geospatial & Cascading Wilayah
+## 8. Diagram 8: Arsitektur Geospatial & Cascading Wilayah
 
 Struktur data wilayah nasional hierarkis 4 tingkat yang digunakan untuk memfilter seluruh katalog, desa wisata, potensi, hingga produk UMKM:
 
@@ -256,4 +331,55 @@ graph TD
 ```http
 GET /api/v1/public/products?province_id=32&regency_id=3204&district_id=320405&village_id=3204052001
 ```
-*Backend menjalankan kueri relasional `whereHas` bertingkat untuk menyaring data secara instan dan akurat.*
+
+---
+
+## 9. Diagram 9: Blueprint Pemetaan Layar Frontend (Frontend Screen & State Blueprint)
+
+Karena sisi frontend saat ini masih dalam proses pembangunan, berikut adalah **pemetaan struktur halaman (*routes*), komponen, dan kondisi tampilan (*states*)** yang harus disiapkan oleh pengembang Frontend (Next.js / Flutter):
+
+```mermaid
+graph TD
+    subgraph Publik [Area Publik]
+        Home["/ (Beranda)"] --> Cat["/sentra-produk (Katalog Produk)"]
+        Home --> VList["/desa-kita (Direktori Desa)"]
+        Home --> Fitur11["11 Modul (Wisata, Ekspor, BUMDes, LKDD, dll)"]
+    end
+
+    subgraph AuthArea [Area Autentikasi]
+        Home --> Login["/login (Form Login Single-Session)"]
+        Home --> Register["/register (Form Daftar Warga)"]
+    end
+
+    subgraph UserArea [Area Pengguna Warga]
+        Login --> Profile["/profile (Profil Pengguna)"]
+        Profile --> MerchantCTA["Banner: Buka Usaha Desa Anda"]
+    end
+
+    subgraph MerchantFlow [Alur Pendaftaran & Kelola UMKM]
+        MerchantCTA --> MReg["/merchant/register (Form Toko + Upload Bukti)"]
+        MReg --> MStatus{"Cek status Toko"}
+        
+        MStatus -->|status: pending| MPending["Layar: Menunggu Persetujuan Admin Desa"]
+        MStatus -->|status: rejected| MReject["Layar: Pendaftaran Ditolak + Alasan"]
+        MStatus -->|status: approved| MDash["/merchant/dashboard (Toko Saya)"]
+        
+        MDash --> MProd["/merchant/products (Katalog Produk Toko)"]
+        MProd --> MAdd["/merchant/products/create (Form Tambah Produk)"]
+        
+        MDash --> MSub["/merchant/membership (Status Masa Aktif)"]
+        MSub --> MRenew["Form Upload Bukti Perpanjang / Bayar QRIS"]
+    end
+```
+
+### 📋 Daftar Layar yang Wajib Dibuat di Frontend:
+
+| Rute Layar Frontend | Endpoint Backend Terkait | Komponen Utama | Kondisi State UI |
+| :--- | :--- | :--- | :--- |
+| **`/login`** | `POST /v1/public/login` | Input Email, Password, Tombol Masuk | Menampilkan error jika email/password salah. |
+| **`/register`** | `POST /v1/public/register` | Input Nama, Email, Password | Simpan Sanctum Token ke LocalStorage/Cookie. |
+| **`/merchant/register`** | `POST /v1/umkm/merchant/register` | Form Toko, Select Wilayah Desa, Upload Logo & Bukti Bayar | Jika user sudah punya toko ➡️ redirect ke dashboard/status. |
+| **`/merchant/status`** | `GET /v1/umkm/merchant` | Kartu Info Status | - **Pending:** Banner oranye *"Menunggu verifikasi admin desa"*.<br>- **Rejected:** Banner merah *"Pendaftaran ditolak"*.<br>- **Approved:** Redirect ke dashboard. |
+| **`/merchant/dashboard`** | `GET /v1/umkm/analytics` | Ringkasan Penjualan, Total Produk, Banner Sisa Masa Aktif | Menampilkan kartu countdown: *"Masa aktif toko sisa X hari lagi"*. |
+| **`/merchant/membership`**| `POST /v1/umkm/merchant/renew` | Info Tanggal Kadaluarsa, Form Upload Bukti Perpanjangan | Jika `membership_expires_at` sudah lewat ➡️ Kunci tombol tambah produk & tampilkan peringatan perpanjang toko. |
+| **`/merchant/products`** | `GET /v1/umkm/my-products` | List Tabel Produk Toko Sendiri, Tombol Edit/Hapus | Tombol **"Tambah Produk"** hanya bisa diklik jika toko `approved` & masa aktif masih berlaku. |
